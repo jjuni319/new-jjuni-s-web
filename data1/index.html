@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부산대학교 인문·사회계열 신입생 정원 분석 웹 보고서</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f3f4f6; /* Gray-100 */
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen pb-12">
+
+    <header class="bg-[#003e7a] text-white py-12 px-6 shadow-md mb-8 rounded-b-3xl">
+        <div class="max-w-5xl mx-auto text-center">
+            <h1 class="text-3xl md:text-4xl font-extrabold mb-4 tracking-tight">부산대학교 인문·사회계열 신입생 정원 분석</h1>
+            <p class="text-blue-100 text-lg md:text-xl max-w-2xl mx-auto opacity-90">상경, 인문, 사회과학, 사범 계열 주요 학과 규모 비교 및 분석 (2026 기준)</p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
+
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-8">
+            <p class="text-slate-600 leading-relaxed text-lg">
+                본 대시보드는 제시된 부산대학교의 주요 인문·사회계열 학과들의 신입생 정원 데이터를 기반으로 시각화되었습니다. 
+                총 12개 주요 학과의 모집 인원을 동적 차트로 구성하여 계열별 비중과 개별 학과의 규모를 한눈에 파악할 수 있도록 돕습니다.
+                특히 국제 교류 및 물류 중심지의 특성을 띠는 <span class="font-bold text-[#ff9900]">무역학부(79명)</span>와, 
+                도시 및 사회 구조 이해를 돕는 <span class="font-bold text-[#ff9900]">사회학과(38명)</span> 등의 규모를 집중적으로 살펴볼 수 있습니다.
+            </p>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <section class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-8 flex flex-col items-center">
+                <div class="w-full flex items-center mb-6 border-b border-slate-100 pb-4">
+                    <div class="w-2 h-6 bg-[#003e7a] rounded mr-3"></div>
+                    <h2 class="text-2xl font-bold text-slate-800">계열별 정원 비중</h2>
+                </div>
+                <div class="w-full relative" style="height: 350px;">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <div class="mt-6 text-slate-600 text-sm md:text-base leading-relaxed bg-slate-50 p-4 rounded-xl w-full">
+                    <strong class="text-[#003e7a] block mb-1">📊 데이터 요약</strong>
+                    분석 대상 중 <b>상경 계열이 전체의 절반 이상(약 56%)</b>을 차지합니다. 경영, 경제, 무역 등 대형 학부가 포진해 있어 가장 큰 파이를 보입니다.
+                </div>
+            </section>
+
+            <section class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-8 flex flex-col items-center">
+                <div class="w-full flex items-center mb-6 border-b border-slate-100 pb-4">
+                    <div class="w-2 h-6 bg-[#003e7a] rounded mr-3"></div>
+                    <h2 class="text-2xl font-bold text-slate-800">주요 학과별 모집 인원</h2>
+                </div>
+                <div class="w-full relative" style="height: 350px;">
+                    <canvas id="departmentChart"></canvas>
+                </div>
+                 <div class="mt-6 text-slate-600 text-sm md:text-base leading-relaxed bg-slate-50 p-4 rounded-xl w-full">
+                    <strong class="text-[#003e7a] block mb-1">💡 주요 포인트</strong>
+                    무역학부와 사회학과를 하이라이트(오렌지색) 처리하였습니다. 각 학과 바에 마우스를 올리면 상세 인원을 확인할 수 있습니다.
+                </div>
+            </section>
+        </div>
+
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-8">
+            <div class="w-full flex items-center mb-6 border-b border-slate-100 pb-4">
+                <div class="w-2 h-6 bg-[#003e7a] rounded mr-3"></div>
+                <h2 class="text-2xl font-bold text-slate-800">상세 데이터 표</h2>
+            </div>
+            
+            <div class="overflow-x-auto rounded-xl border border-slate-200">
+                <table class="min-w-full divide-y divide-slate-200">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-slate-700 uppercase tracking-wider">단과대학(계열)</th>
+                            <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-slate-700 uppercase tracking-wider">학과/학부명</th>
+                            <th scope="col" class="px-6 py-4 text-right text-sm font-semibold text-slate-700 uppercase tracking-wider">신입생 정원 (명)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody" class="bg-white divide-y divide-slate-200">
+                        <!-- Data will be populated here via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Raw Data
+            const data = [
+                { category: '상경', department: '경영학과', quota: 207 },
+                { category: '상경', department: '경제학부', quota: 81 },
+                { category: '상경', department: '무역학부', quota: 79 },
+                { category: '인문', department: '영어영문학과', quota: 45 },
+                { category: '사회과학', department: '심리학과', quota: 39 },
+                { category: '사회과학', department: '사회학과', quota: 38 },
+                { category: '사회과학', department: '행정학과', quota: 34 },
+                { category: '인문', department: '중어중문학과', quota: 30 },
+                { category: '인문', department: '사학과', quota: 29 },
+                { category: '사범', department: '국어교육과', quota: 27 },
+                { category: '사범', department: '영어교육과', quota: 27 },
+                { category: '사범', department: '교육학과', quota: 14 }
+            ];
+
+            // Sort data by quota descending for the bar chart
+            const sortedData = [...data].sort((a, b) => b.quota - a.quota);
+
+            // Group data by category for the donut chart
+            const categorySums = data.reduce((acc, curr) => {
+                acc[curr.category] = (acc[curr.category] || 0) + curr.quota;
+                return acc;
+            }, {});
+
+            const categoryLabels = Object.keys(categorySums);
+            const categoryData = Object.values(categorySums);
+
+            // Chart Colors
+            const brandColors = ['#003e7a', '#4a90e2', '#7fb3d5', '#d4e6f1'];
+            const highlightColor = '#ff9900';
+            const defaultBarColor = 'rgba(74, 144, 226, 0.8)'; // #4a90e2 with opacity
+            const defaultBarBorder = 'rgba(74, 144, 226, 1)';
+
+            const ctxCat = document.getElementById('categoryChart').getContext('2d');
+            new Chart(ctxCat, {
+                type: 'doughnut',
+                data: {
+                    labels: categoryLabels,
+                    datasets: [{
+                        data: categoryData,
+                        backgroundColor: brandColors,
+                        borderWidth: 2,
+                        borderColor: '#ffffff',
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: "'Pretendard', sans-serif",
+                                    size: 13
+                                },
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '명';
+                                        
+                                        // Calculate percentage
+                                        let total = context.chart._metasets[context.datasetIndex].total;
+                                        let percentage = Math.round((context.parsed / total) * 100);
+                                        label += ' (' + percentage + '%)';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+            const ctxDept = document.getElementById('departmentChart').getContext('2d');
+            
+            // Map colors based on department name (highlighting specific ones)
+            const barColors = sortedData.map(item => 
+                ['무역학부', '사회학과'].includes(item.department) ? highlightColor : defaultBarColor
+            );
+            const barBorders = sortedData.map(item => 
+                ['무역학부', '사회학과'].includes(item.department) ? '#e68a00' : defaultBarBorder
+            );
+
+            new Chart(ctxDept, {
+                type: 'bar',
+                data: {
+                    labels: sortedData.map(item => item.department),
+                    datasets: [{
+                        label: '정원 (명)',
+                        data: sortedData.map(item => item.quota),
+                        backgroundColor: barColors,
+                        borderColor: barBorders,
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Makes it horizontal
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false // Hide legend as we only have one dataset
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.x + ' 명';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '인원수',
+                                font: {
+                                    family: "'Pretendard', sans-serif"
+                                }
+                            },
+                            grid: {
+                                color: '#f1f5f9'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                font: {
+                                    family: "'Pretendard', sans-serif"
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            const tableBody = document.getElementById('dataTableBody');
+            
+            // Re-sort data by Category then Quota for the table
+            const tableData = [...data].sort((a, b) => {
+                if (a.category === b.category) {
+                    return b.quota - a.quota;
+                }
+                return a.category.localeCompare(b.category);
+            });
+
+            tableData.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-slate-50 transition-colors duration-150';
+                
+                // Highlight logic for table row
+                const isHighlighted = ['무역학부', '사회학과'].includes(item.department);
+                const deptClass = isHighlighted ? 'font-bold text-[#ff9900]' : 'text-slate-700';
+
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-medium">
+                        ${item.category}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm ${deptClass}">
+                        ${item.department}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800 text-right font-semibold">
+                        ${item.quota}
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        });
+    </script>
+</body>
+</html>

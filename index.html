@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jjuni's Portfolio & Data Lab</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-500 selection:text-white">
+
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-md">
+                    J
+                </div>
+                <span class="text-xl font-bold bg-gradient-to-r from-slate-900 to-brand-700 bg-clip-text text-transparent">jjuni.portfolio</span>
+            </div>
+            <nav class="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
+                <a href="../index.html" class="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 hover:bg-brand-50 hover:text-brand-600 rounded-xl transition-all">
+                    <i class="fa-solid fa-house text-xs"></i>
+                    <span>홈</span>
+                </a>
+                <a href="#hero" class="hover:text-brand-600 transition-colors">소개</a>
+                <a href="#career" class="hover:text-brand-600 transition-colors">진로 보고서</a>
+                <a href="#traffic" class="hover:text-brand-600 transition-colors">교통데이터 분석</a>
+                <a href="#contact" class="hover:text-brand-600 transition-colors">연락처</a>
+            </nav>
+            <div>
+                <a href="#traffic" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all transform hover:-translate-y-0.5">
+                    프로젝트 체험하기
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section id="hero" class="relative overflow-hidden pt-20 pb-24 lg:pt-32 lg:pb-36 bg-gradient-to-b from-brand-50/50 via-white to-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-xs font-semibold mb-6 animate-pulse">
+                <i class="fa-solid fa-sparkles"></i>
+                <span>Data-Driven Problem Solver</span>
+            </div>
+            <h1 class="text-4xl sm:text-6xl font-extrabold text-slate-900 tracking-tight mb-6">
+                데이터로 세상을 읽고 기록하는 <br class="hidden sm:inline" />
+                <span class="bg-gradient-to-r from-brand-600 to-indigo-600 bg-clip-text text-transparent">jjuni의 포트폴리오</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-lg text-slate-600 mb-10 leading-relaxed">
+                데이터 분석 역량을 바탕으로 진로에 대한 인사이트를 도출하고, 도시 교통 흐름을 최적화하는 교통데이터 분석 리포트를 제공합니다.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="#career" class="w-full sm:w-auto px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-2xl shadow-lg transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span>진로 보고서 보기</span>
+                </a>
+                <a href="#traffic" class="w-full sm:w-auto px-8 py-4 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold rounded-2xl shadow-sm transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>교통데이터 랜딩페이지</span>
+                </a>
+            </div>
+        </div>
+        <!-- Decorative blobs -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-100 rounded-full blur-3xl opacity-50 -z-10 pointer-events-none"></div>
+    </section>
+
+    <section id="career" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <a href="./data1/index.html" class="inline-block group">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-4 group-hover:text-brand-600 transition-colors">데이터 기반 진로 보고서 <i class="fa-solid fa-arrow-up-right-from-square text-lg ml-1"></i></h2>
+                </a>
+                <p class="text-slate-600">노동 시장 데이터, 직업별 트렌드 및 역량 분석을 통해 도출한 진로 탐색 리포트입니다.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <a href="./data1/index.html" class="glass-card rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between border border-slate-200 group block">
+                    <div>
+                        <div class="w-12 h-12 bg-blue-50 text-brand-600 rounded-xl flex items-center justify-center text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-brand-600 bg-brand-50 px-3 py-1 rounded-full uppercase tracking-wider">Data Analysis</span>
+                        <h3 class="text-xl font-bold text-slate-900 mt-3 mb-2 group-hover:text-brand-600 transition-colors">부산대학교 인문·사회계열 신입생 정원 분석</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                            부산대학교 인문·사회계열 학과별 신입생 정원 변화 추이와 공공 데이터를 다각도로 분석하여 입학 정원 인프라 변화 요인을 다룬 보고서입니다.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="border-t border-slate-100 pt-4 flex items-center justify-between">
+                            <span class="text-xs text-slate-400">등록일: 2026.03</span>
+                            <span class="text-sm font-semibold text-brand-600 group-hover:text-brand-700 flex items-center space-x-1">
+                                <span>상세보기</span>
+                                <i class="fa-solid fa-arrow-right text-xs transform group-hover:translate-x-1 transition-transform"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 2 -->
+                <a href="./data2/index.html" class="glass-card rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between border border-slate-200 group block">
+                    <div>
+                        <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-bicycle"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full uppercase tracking-wider">Traffic Safety</span>
+                        <h3 class="text-xl font-bold text-slate-900 mt-3 mb-2 group-hover:text-indigo-600 transition-colors">도시 자전거 교통사고 위험 지역 및 구조적 분석</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                            도시 내 자전거 교통사고 데이터와 도로 및 교통 인프라 요인을 공간 분석하여 사고 위험 지역을 도출하고 구조적 원인을 진단한 보고서입니다.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="border-t border-slate-100 pt-4 flex items-center justify-between">
+                            <span class="text-xs text-slate-400">등록일: 2026.02</span>
+                            <span class="text-sm font-semibold text-indigo-600 group-hover:text-indigo-700 flex items-center space-x-1">
+                                <span>상세보기</span>
+                                <i class="fa-solid fa-arrow-right text-xs transform group-hover:translate-x-1 transition-transform"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 3 -->
+                <a href="./data3/index.html" class="glass-card rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between border border-slate-200 group block">
+                    <div>
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-car"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-wider">Automobile Data</span>
+                        <h3 class="text-xl font-bold text-slate-900 mt-3 mb-2 group-hover:text-emerald-600 transition-colors">2025년 지역별 자동차 등록 현황 및 특성 분석</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                            2025년 국내 지역별 자동차 등록 현황 데이터를 다각도로 분석하여 차종별 보급률, 친환경 차량 증가 추세 및 지역별 분포 특성을 도출한 보고서입니다.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="border-t border-slate-100 pt-4 flex items-center justify-between">
+                            <span class="text-xs text-slate-400">등록일: 2026.01</span>
+                            <span class="text-sm font-semibold text-emerald-600 group-hover:text-emerald-700 flex items-center space-x-1">
+                                <span>상세보기</span>
+                                <i class="fa-solid fa-arrow-right text-xs transform group-hover:translate-x-1 transition-transform"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="traffic" class="py-24 bg-slate-900 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-semibold text-brand-400 bg-brand-950 border border-brand-800 px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">Featured Project Landing Page</span>
+                <a href="./data2/index.html" class="inline-block group">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4 group-hover:text-brand-400 transition-colors">지능형 도시 교통 데이터 분석 플랫폼 <i class="fa-solid fa-arrow-up-right-from-square text-lg ml-1"></i></h2>
+                </a>
+                <p class="text-slate-400 text-base sm:text-lg">실시간 교통 혼잡도 패턴 분석 및 공공 데이터 기반 대중교통 최적화 솔루션을 경험하세요.</p>
+            </div>
+
+            <!-- Interactive Traffic Dashboard Demo -->
+            <div class="bg-slate-800/80 backdrop-blur-xl border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-2xl">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center pb-8 border-b border-slate-700 gap-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-traffic-light text-brand-400"></i>
+                            <span>실시간 주요 구간 교통량 대시보드</span>
+                        </h3>
+                        <p class="text-slate-400 text-sm mt-1">공공 API 및 교통 센서 데이터를 활용한 시뮬레이션 지표</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="relative flex h-3 w-3">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                        </span>
+                        <span class="text-xs text-emerald-400 font-semibold">LIVE 데이터 연동 중</span>
+                    </div>
+                </div>
+
+                <!-- Stats Overview -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 my-8">
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/60">
+                        <span class="text-xs text-slate-400 block mb-1">평균 통행 속도</span>
+                        <div class="flex items-baseline space-x-2">
+                            <span class="text-3xl font-extrabold text-white">42.5</span>
+                            <span class="text-sm text-slate-400">km/h</span>
+                            <span class="text-xs text-emerald-400 font-semibold ml-auto">+3.2% ↑</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/60">
+                        <span class="text-xs text-slate-400 block mb-1">혼잡 지수 (Congestion)</span>
+                        <div class="flex items-baseline space-x-2">
+                            <span class="text-3xl font-extrabold text-amber-400">보통</span>
+                            <span class="text-sm text-slate-400">(상태 안정)</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/60">
+                        <span class="text-xs text-slate-400 block mb-1">분석 대상 교차로 수</span>
+                        <div class="flex items-baseline space-x-2">
+                            <span class="text-3xl font-extrabold text-white">1,280</span>
+                            <span class="text-sm text-slate-400">개소</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart and Controls -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                    <div class="lg:col-span-2 bg-slate-900/60 p-6 rounded-2xl border border-slate-700/60 h-80 flex flex-col justify-center">
+                        <canvas id="trafficChart"></canvas>
+                    </div>
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/60 flex flex-col justify-between h-80">
+                        <div>
+                            <h4 class="font-bold text-white mb-2">분석 인사이트 요약</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                출근 시간대(08:00~09:00) 간선도로 정체 현상이 집중되며, 신호 주기 최적화를 통해 평균 대기 시간을 약 14.5% 단축할 수 있는 잠재력이 확인되었습니다.
+                            </p>
+                        </div>
+                        <div class="space-y-3">
+                            <button onclick="updateTrafficData('morning')" class="w-full py-2.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold rounded-xl transition-all">
+                                출근 시간대 패턴 보기
+                            </button>
+                            <button onclick="updateTrafficData('evening')" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl border border-slate-600 transition-all">
+                                퇴근 시간대 패턴 보기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 pt-12 border-t border-slate-700">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 rounded-xl bg-brand-900/80 text-brand-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-database"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-white mb-1">대용량 공공 데이터 수집</h5>
+                            <p class="text-xs text-slate-400">교통정보센터 및 버스정보시스템(BIS) 실시간 로그 데이터를 정제 및 파이프라인 구축.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 rounded-xl bg-brand-900/80 text-brand-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-white mb-1">시계열 패턴 분석</h5>
+                            <p class="text-xs text-slate-400">요일별, 시간대별 차량 이동량 변화를 통계 모델링하여 혼잡 구간 예측.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 rounded-xl bg-brand-900/80 text-brand-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-white mb-1">시각화 대시보드</h5>
+                            <p class="text-xs text-slate-400">사용자가 직관적으로 이해할 수 있는 웹 기반 차트 및 UI 제공.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="bg-white border-t border-slate-200 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4">함께 협업하거나 소통하고 싶으신가요?</h2>
+            <p class="text-slate-600 mb-8 max-w-md mx-auto">진로 보고서나 교통데이터 분석 프로젝트에 대해 궁금한 점이 있으시면 언제든지 연락주세요.</p>
+            <div class="flex justify-center space-x-6 mb-12">
+                <a href="mailto:jjuni@example.com" class="w-12 h-12 rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-600 flex items-center justify-center text-lg transition-all shadow-sm">
+                    <i class="fa-solid fa-envelope"></i>
+                </a>
+                <a href="https://github.com" target="_blank" class="w-12 h-12 rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-600 flex items-center justify-center text-lg transition-all shadow-sm">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="https://linkedin.com" target="_blank" class="w-12 h-12 rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-600 flex items-center justify-center text-lg transition-all shadow-sm">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+            </div>
+            <p class="text-xs text-slate-400">© 2026 jjuni. All rights reserved. Built with passion & data.</p>
+        </div>
+    </footer>
+
+    <div id="reportModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl max-w-lg w-full mx-4 p-8 shadow-2xl transform scale-95 transition-transform duration-300" id="modalContentBox">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="modalTitle" class="text-xl font-bold text-slate-900">보고서 제목</h3>
+                <button onclick="closeReportModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <p id="modalDesc" class="text-slate-600 text-sm leading-relaxed mb-8">
+                보고서 상세 내용이 이곳에 표시됩니다.
+            </p>
+            <div class="flex justify-end">
+                <button onclick="closeReportModal()" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-xl transition-all">
+                    확인 완료
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functions
+        function openReportModal(title, desc) {
+            const modal = document.getElementById('reportModal');
+            const box = document.getElementById('modalContentBox');
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = desc;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                box.classList.remove('scale-95');
+                box.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeReportModal() {
+            const modal = document.getElementById('reportModal');
+            const box = document.getElementById('modalContentBox');
+            modal.classList.add('opacity-0');
+            box.classList.remove('scale-100');
+            box.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Traffic Chart Initialization
+        let trafficChart;
+        window.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('trafficChart').getContext('2d');
+            trafficChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
+                    datasets: [{
+                        label: '평균 통행량 (대/분)',
+                        data: [120, 380, 210, 190, 220, 250, 410, 280],
+                        borderColor: '#0ea5e9',
+                        backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#0ea5e9',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#94a3b8', font: { family: 'Pretendard' } }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8', font: { family: 'Pretendard' } }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8', font: { family: 'Pretendard' } }
+                        }
+                    }
+                }
+            });
+        });
+
+        // Dynamic chart updater simulating traffic patterns
+        function updateTrafficData(type) {
+            if (type === 'morning') {
+                trafficChart.data.datasets[0].data = [150, 450, 230, 180, 200, 210, 310, 190];
+                trafficChart.update();
+            } else {
+                trafficChart.data.datasets[0].data = [100, 200, 190, 220, 280, 390, 480, 310];
+                trafficChart.update();
+            }
+        }
+    </script>
+</body>
+</html>

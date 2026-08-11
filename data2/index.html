@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 대한민국 자전거 교통사고 통계 분석 보고서 (Man City Edition)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        city: {
+                            sky: '#6CABDD',
+                            blue: '#1C2C5B',
+                            dark: '#0B192C',
+                            card: '#132238',
+                            accent: '#FFC659',
+                            red: '#EC3325'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .city-gradient {
+            background: linear-gradient(135deg, #0B192C 0%, #1C2C5B 50%, #132238 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(108, 171, 221, 0.1), 0 8px 10px -6px rgba(108, 171, 221, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-city-dark text-slate-100 font-sans min-h-screen flex flex-col selection:bg-city-sky selection:text-city-dark">
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-50 bg-city-dark/90 backdrop-blur-md border-b border-city-sky/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" id="navLogoBtn">
+                <div class="w-10 h-10 rounded-full bg-city-sky flex items-center justify-center text-city-dark font-extrabold shadow-lg">
+                    <i class="fa-solid fa-bicycle text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold tracking-tight text-white text-base sm:text-lg">2025 자전거 교통사고 분석</h1>
+                    <p class="text-xs text-city-sky font-semibold">MANCHESTER CITY INTELLIGENCE PORTAL</p>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center space-x-6 text-sm">
+                <a href="#" id="navHomeLink" class="hover:text-city-sky transition-colors font-semibold text-city-sky">홈 화면</a>
+                <a href="#overview" class="hover:text-city-sky transition-colors">전국 개요</a>
+                <a href="#regions" class="hover:text-city-sky transition-colors">시도별 비교</a>
+                <a href="#district-explorer" class="hover:text-city-sky transition-colors">시/구/군별 검색</a>
+                <a href="#monthly-trend" class="hover:text-city-sky transition-colors">월별 추이 분석</a>
+                <a href="#seoul" class="hover:text-city-sky transition-colors">서울 자치구</a>
+                <a href="#busan-daegu" class="hover:text-city-sky transition-colors">부산·대구 특성</a>
+                <a href="#conclusion" class="hover:text-city-sky transition-colors">종합 결론</a>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button id="toggleViewBtn" class="px-3.5 py-2 bg-city-sky text-city-dark text-xs font-extrabold rounded-lg shadow hover:bg-white transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-house" id="viewBtnIcon"></i>
+                    <span id="viewBtnText">대시보드 보기</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Home Welcome Screen (Toggleable) -->
+    <div id="homeScreen" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col justify-center items-center text-center w-full">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-city-sky/20 text-city-sky text-xs font-bold mb-6 border border-city-sky/30">
+            <i class="fa-solid fa-shield-halved"></i> 2025 공식 교통안전 인텔리전스 포털 (Man City Theme)
+        </div>
+        <h2 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-6 max-w-4xl leading-tight">
+            대한민국 자전거 교통사고 <span class="text-city-sky">종합 분석 및 안전 가이드</span>
+        </h2>
+        <p class="text-slate-300 text-lg sm:text-xl max-w-2xl mb-10 leading-relaxed">
+            맨체스터 시티 테마로 재탄생한 프리미엄 도시 안전 데이터 분석 플랫폼. 전국 광역 시·도부터 세부 시·구·군별 사고 지표와 월별 트렌드를 완벽하게 탐색하세요.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4 mb-16">
+            <button id="enterDashboardBtn" class="px-8 py-4 bg-city-sky text-city-dark font-extrabold rounded-xl shadow-xl hover:bg-white transition-all transform hover:-translate-y-1 flex items-center gap-3 text-base">
+                <span>종합 대시보드 바로가기</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <a href="#district-explorer" id="gotoDistrictBtn" class="px-8 py-4 bg-city-card border border-city-sky/40 text-white font-bold rounded-xl hover:bg-city-blue/50 transition-all flex items-center gap-3 text-base">
+                <span>시/구/군별 검색하기</span>
+                <i class="fa-solid fa-magnifying-glass text-city-sky"></i>
+            </a>
+        </div>
+
+        <!-- Quick Highlight Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl text-left">
+            <div class="bg-city-card border border-city-sky/20 rounded-xl p-6 shadow-xl hover:border-city-sky transition-colors">
+                <div class="text-city-sky text-2xl mb-3"><i class="fa-solid fa-map-location-dot"></i></div>
+                <h3 class="text-white font-bold text-lg mb-2">시/구/군별 상세 검색</h3>
+                <p class="text-slate-400 text-sm">서울, 부산, 대구의 각 구/군 단위 상세 사고 건수, 사망자, 부상자 규모를 실시간으로 필터링합니다.</p>
+            </div>
+            <div class="bg-city-card border border-city-sky/20 rounded-xl p-6 shadow-xl hover:border-city-sky transition-colors">
+                <div class="text-city-sky text-2xl mb-3"><i class="fa-solid fa-chart-line"></i></div>
+                <h3 class="text-white font-bold text-lg mb-2">월별 트렌드 분석</h3>
+                <p class="text-slate-400 text-sm">봄·가을 야외 활동 성수기에 집중되는 사고 피크 타임과 계절별 월별 추이 데이터를 제공합니다.</p>
+            </div>
+            <div class="bg-city-card border border-city-sky/20 rounded-xl p-6 shadow-xl hover:border-city-sky transition-colors">
+                <div class="text-city-accent text-2xl mb-3"><i class="fa-solid fa-lightbulb"></i></div>
+                <h3 class="text-white font-bold text-lg mb-2">다인 피해 및 치사율 정책</h3>
+                <p class="text-slate-400 text-sm">사고 대비 부상자 108% 구조와 지역별 치사율 편차를 분석하여 맞춤형 안전 대책을 제시합니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section (Dashboard Top Banner) -->
+    <section id="heroSection" class="relative city-gradient py-14 px-4 sm:px-6 lg:px-8 border-b border-city-sky/20 overflow-hidden hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#6CABDD_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="max-w-2xl">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-city-sky/20 text-city-sky text-xs font-bold mb-4 border border-city-sky/30">
+                    <i class="fa-solid fa-chart-pie"></i> 2025 공식 교통안전 통계 인텔리전스
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
+                    2025년 대한민국 <span class="text-city-sky">자전거 교통사고</span> 분석 보고서
+                </h2>
+                <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
+                    전국 5,235건의 사고 데이터와 세부 자치구별·월별 트렌드를 다각도로 분석하여 안전한 도시 인프라 구축 방향을 제시합니다.
+                </p>
+            </div>
+            <div class="grid grid-cols-2 gap-4 w-full md:w-auto">
+                <div class="bg-city-card/90 border border-city-sky/30 p-5 rounded-2xl shadow-xl text-center">
+                    <div class="text-city-sky text-3xl font-black mb-1">5,235건</div>
+                    <div class="text-xs text-slate-300 font-medium">전국 총 사고 건수</div>
+                </div>
+                <div class="bg-city-card/90 border border-city-sky/30 p-5 rounded-2xl shadow-xl text-center">
+                    <div class="text-city-accent text-3xl font-black mb-1">108%</div>
+                    <div class="text-xs text-slate-300 font-medium">사고 대비 부상률</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Dashboard Body -->
+    <main id="mainDashboard" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16 w-full hidden">
+        
+        <!-- Section 1: Overview -->
+        <section id="overview" class="space-y-6">
+            <div class="border-l-4 border-city-sky pl-4">
+                <span class="text-city-sky text-xs font-bold uppercase tracking-wider">Chapter 01</span>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-white">2025년 전국 자전거 교통사고 현황 개요</h3>
+            </div>
+            <div class="bg-city-card border border-city-sky/20 rounded-2xl p-6 sm:p-8 card-shadow space-y-6">
+                <p class="text-slate-300 leading-relaxed text-base">
+                    2025년 전국 자전거 교통사고 데이터를 분석한 결과, 사고의 빈도 못지않게 사고 발생 시 피해의 심각성이 매우 높은 것으로 확인되었습니다. 단순히 사고 발생 건수를 넘어, 인명 피해의 다변화 양상을 주목해야 합니다.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-5 rounded-xl text-center">
+                        <div class="text-slate-400 text-xs uppercase font-bold mb-1">사고 발생 건수</div>
+                        <div class="text-2xl sm:text-3xl font-black text-white">5,235 <span class="text-sm font-normal text-slate-400">건</span></div>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-5 rounded-xl text-center">
+                        <div class="text-slate-400 text-xs uppercase font-bold mb-1">사망자 수</div>
+                        <div class="text-2xl sm:text-3xl font-black text-city-red">85 <span class="text-sm font-normal text-slate-400">명</span></div>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-5 rounded-xl text-center">
+                        <div class="text-slate-400 text-xs uppercase font-bold mb-1">부상자 수</div>
+                        <div class="text-2xl sm:text-3xl font-black text-city-sky">5,655 <span class="text-sm font-normal text-slate-400">명</span></div>
+                    </div>
+                </div>
+                <div class="bg-city-sky/10 border border-city-sky/30 p-5 rounded-xl flex items-start gap-4">
+                    <div class="text-city-sky text-2xl mt-0.5"><i class="fa-solid fa-circle-info"></i></div>
+                    <div>
+                        <h4 class="text-white font-bold mb-1">분석 의견: 사고 대비 부상자 비율 약 108%</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            부상자 수가 사고 건수를 상회하는 108%의 비율은 사고 1건당 평균 1명 이상의 부상자가 발생하고 있음을 의미합니다. 이는 자전거 사고가 단독 사고에 그치지 않고 보행자나 타 운전자를 포함한 다수의 인명 피해를 동반하는 <b>'다인 피해'</b> 특성을 지니고 있음을 시사합니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Regional Comparison -->
+        <section id="regions" class="space-y-6">
+            <div class="border-l-4 border-city-sky pl-4">
+                <span class="text-city-sky text-xs font-bold uppercase tracking-wider">Chapter 02</span>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-white">주요 시도별 사고 지표 비교</h3>
+            </div>
+            <div class="bg-city-card border border-city-sky/20 rounded-2xl p-6 sm:p-8 card-shadow space-y-6">
+                <p class="text-slate-300 text-base leading-relaxed">
+                    전국 광역자치단체 중 서울, 부산, 대구의 데이터를 비교한 결과, 서울 지역의 사고 집중도가 비정상적으로 높은 <b>'수도권 편중 현상'</b>이 관찰됩니다.
+                </p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-city-sky/30 text-city-sky text-xs uppercase tracking-wider">
+                                <th class="py-3 px-4 font-bold">시도명</th>
+                                <th class="py-3 px-4 font-bold">사고 (건)</th>
+                                <th class="py-3 px-4 font-bold">사망 (명)</th>
+                                <th class="py-3 px-4 font-bold">부상 (명)</th>
+                                <th class="py-3 px-4 font-bold">치사율 (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800 text-sm">
+                            <tr class="hover:bg-city-dark/40 transition-colors">
+                                <td class="py-3.5 px-4 font-bold text-white flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-city-sky"></span> 서울</td>
+                                <td class="py-3.5 px-4 font-semibold text-white">1,574</td>
+                                <td class="py-3.5 px-4 text-slate-300">13</td>
+                                <td class="py-3.5 px-4 text-city-sky font-medium">1,717</td>
+                                <td class="py-3.5 px-4 text-slate-300">0.83%</td>
+                            </tr>
+                            <tr class="hover:bg-city-dark/40 transition-colors">
+                                <td class="py-3.5 px-4 font-bold text-white flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span> 부산</td>
+                                <td class="py-3.5 px-4 font-semibold text-white">175</td>
+                                <td class="py-3.5 px-4 text-slate-300">2</td>
+                                <td class="py-3.5 px-4 text-city-sky font-medium">184</td>
+                                <td class="py-3.5 px-4 text-slate-300">1.14%</td>
+                            </tr>
+                            <tr class="hover:bg-city-dark/40 transition-colors">
+                                <td class="py-3.5 px-4 font-bold text-white flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> 대구</td>
+                                <td class="py-3.5 px-4 font-semibold text-white">369</td>
+                                <td class="py-3.5 px-4 text-slate-300">4</td>
+                                <td class="py-3.5 px-4 text-city-sky font-medium">406</td>
+                                <td class="py-3.5 px-4 text-slate-300">1.08%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-5 rounded-xl space-y-2">
+                        <h4 class="text-white font-bold flex items-center gap-2"><i class="fa-solid fa-chart-bar text-city-sky"></i> 서울의 압도적 집중도</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            서울은 전국 사고 건수의 <b>약 30%</b>를 차지하고 있습니다. 이는 자전거 도로 인프라가 집중된 동시에 이용률이 높은 서울의 특성이 반영된 결과로 보입니다.
+                        </p>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-5 rounded-xl space-y-2">
+                        <h4 class="text-white font-bold flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation text-city-accent"></i> 빈도와 치사율의 상관관계</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            서울은 사고 빈도가 압도적이지만 치사율은 0.83%로 낮습니다. 반면 부산과 대구는 사고 빈도는 상대적으로 낮으나 사고 당 치명도는 높게 나타납니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Section: District Explorer (시/구/군별 검색) -->
+        <section id="district-explorer" class="space-y-6">
+            <div class="border-l-4 border-city-sky pl-4">
+                <span class="text-city-sky text-xs font-bold uppercase tracking-wider">Chapter 03-1</span>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-white">시/구/군별 상세 사고 데이터 조회</h3>
+            </div>
+            <div class="bg-city-card border border-city-sky/20 rounded-2xl p-6 sm:p-8 card-shadow space-y-6">
+                <p class="text-slate-300 text-base leading-relaxed">
+                    지역별 세부 시/구/군 자치구 단위로 자전거 교통사고 통계를 필터링하여 확인하세요. 검색창을 통해 특정 구를 바로 검색할 수 있습니다.
+                </p>
+                
+                <!-- Filter Controls -->
+                <div class="flex flex-col sm:flex-row gap-4 items-center justify-between bg-city-dark/70 p-4 rounded-xl border border-city-sky/20">
+                    <div class="w-full sm:w-1/3">
+                        <label for="regionFilter" class="block text-xs font-bold text-city-sky uppercase mb-1">광역 지역 선택</label>
+                        <select id="regionFilter" class="w-full bg-city-card border border-city-sky/40 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-city-sky">
+                            <option value="all">전체 권역 (서울·부산·대구)</option>
+                            <option value="seoul">서울특별시</option>
+                            <option value="busan">부산광역시</option>
+                            <option value="daegu">대구광역시</option>
+                        </select>
+                    </div>
+                    <div class="w-full sm:w-2/3">
+                        <label for="districtSearch" class="block text-xs font-bold text-city-sky uppercase mb-1">시/구/군 검색</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
+                            <input type="text" id="districtSearch" placeholder="예: 영등포구, 수영구, 동구 검색..." class="w-full bg-city-card border border-city-sky/40 rounded-lg pl-10 pr-4 py-2 text-white text-sm focus:outline-none focus:border-city-sky">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- District Table -->
+                <div class="overflow-x-auto max-h-96">
+                    <table class="w-full text-left border-collapse" id="districtTable">
+                        <thead class="sticky top-0 bg-city-dark text-city-sky text-xs uppercase tracking-wider border-b border-city-sky/30">
+                            <tr>
+                                <th class="py-3 px-4 font-bold">권역</th>
+                                <th class="py-3 px-4 font-bold">시/구/군 명</th>
+                                <th class="py-3 px-4 font-bold">사고 건수</th>
+                                <th class="py-3 px-4 font-bold">사망자</th>
+                                <th class="py-3 px-4 font-bold">부상자</th>
+                                <th class="py-3 px-4 font-bold">특징 및 유형</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800 text-sm">
+                            <!-- Seoul Districts -->
+                            <tr class="district-row hover:bg-city-dark/40" data-region="seoul" data-name="영등포구">
+                                <td class="py-3 px-4 text-city-sky font-medium">서울</td>
+                                <td class="py-3 px-4 font-bold text-white">영등포구</td>
+                                <td class="py-3 px-4 font-bold">169건</td>
+                                <td class="py-3 px-4 text-slate-300">1명</td>
+                                <td class="py-3 px-4 text-city-sky">195명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-city-sky/20 text-city-sky font-semibold">빈도 상위 (Hub)</span> 업무·상업 밀집</td>
+                            </tr>
+                            <tr class="district-row hover:bg-city-dark/40" data-region="seoul" data-name="송파구">
+                                <td class="py-3 px-4 text-city-sky font-medium">서울</td>
+                                <td class="py-3 px-4 font-bold text-white">송파구</td>
+                                <td class="py-3 px-4 font-bold">144건</td>
+                                <td class="py-3 px-4 text-slate-300">1명</td>
+                                <td class="py-3 px-4 text-city-sky">155명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-city-sky/20 text-city-sky font-semibold">빈도 상위 (Hub)</span> 여가·주거 밀집</td>
+                            </tr>
+                            <tr class="district-row hover:bg-city-dark/40" data-region="seoul" data-name="강남구">
+                                <td class="py-3 px-4 text-city-sky font-medium">서울</td>
+                                <td class="py-3 px-4 font-bold text-white">강남구</td>
+                                <td class="py-3 px-4 font-bold">119건</td>
+                                <td class="py-3 px-4 text-slate-300">1명</td>
+                                <td class="py-3 px-4 text-city-sky">129명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-city-sky/20 text-city-sky font-semibold">빈도 상위 (Hub)</span> 교통 요충지</td>
+                            </tr>
+                            <tr class="district-row hover:bg-city-dark/40" data-region="seoul" data-name="동대문구">
+                                <td class="py-3 px-4 text-city-sky font-medium">서울</td>
+                                <td class="py-3 px-4 font-bold text-white">동대문구</td>
+                                <td class="py-3 px-4 font-bold">107건</td>
+                                <td class="py-3 px-4 text-slate-300">1명</td>
+                                <td class="py-3 px-4 text-city-sky">114명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-city-sky/20 text-city-sky font-semibold">빈도 상위</span> 부도심 거점</td>
+                            </tr>
+                            <tr class="district-row hover:bg-city-dark/40" data-region="seoul" data-name="은평구">
+                                <td class="py-3 px-4 text-city-sky font-medium">서울</td>
+                                <td class="py-3 px-4 font-bold text-white">은평구</td>
+                                <td class="py-3 px-4 font-bold">74건</td>
+                                <td class="py-3 px-4 text-city-red font-bold">2명</td>
+                                <td class="py-3 px-4 text-city-sky">78명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-city-accent/20 text-city-accent font-semibold">치사율 고위험 (2.7%)</span></td>
+                            </tr>
+                            <tr class="district-row hover:bg-city-dark/40" data-region="seoul" data-name="광진구">
+                                <td class="py-3 px-4 text-city-sky font-medium">서울</td>
+                                <td class="py-3 px-4 font-bold text-white">광진구</td>
+                                <td class="py-3 px-4 font-bold">41건</td>
+                                <td class="py-3 px-4 text-city-red font-bold">2명</td>
+                                <td class="py-3 px-4 text-city-sky">43명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-city-accent/20 text-city-accent font-bold">치사율 최고위험 (4.88%)</span></td>
+                            </tr>
+                            <tr class="district-row hover:bg-city-dark/40" data-region="seoul" data-name="종로구">
+                                <td class="py-3 px-4 text-city-sky font-medium">서울</td>
+                                <td class="py-3 px-4 font-bold text-white">종로구</td>
+                                <td class="py-3 px-4 font-bold">26건</td>
+                                <td class="py-3 px-4 text-slate-300">0명</td>
+                                <td class="py-3 px-4 text-city-sky">28명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-slate-700 text-slate-300">저빈도 지역</span> 도심 중앙부</td>
+                            </tr>
+                            <tr class="district-row hover:bg-city-dark/40" data-region="seoul" data-name="용산구">
+                                <td class="py-3 px-4 text-city-sky font-medium">서울</td>
+                                <td class="py-3 px-4 font-bold text-white">용산구</td>
+                                <td class="py-3 px-4 font-bold">25건</td>
+                                <td class="py-3 px-4 text-slate-300">0명</td>
+                                <td class="py-3 px-4 text-city-sky">27명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-slate-700 text-slate-300">저빈도 지역</span></td>
+                            </tr>
+                            <tr class="district-row hover:bg-city-dark/40" data-region="seoul" data-name="중구">
+                                <td class="py-3 px-4 text-city-sky font-medium">서울</td>
+                                <td class="py-3 px-4 font-bold text-white">중구</td>
+                                <td class="py-3 px-4 font-bold">18건</td>
+                                <td class="py-3 px-4 text-slate-300">0명</td>
+                                <td class="py-3 px-4 text-city-sky">19명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-slate-700 text-slate-300">저빈도 지역</span></td>
+                            </tr>
+                            <!-- Busan Districts -->
+                            <tr class="district-row hover:bg-city-dark/40" data-region="busan" data-name="수영구">
+                                <td class="py-3 px-4 text-blue-400 font-medium">부산</td>
+                                <td class="py-3 px-4 font-bold text-white">수영구</td>
+                                <td class="py-3 px-4 font-bold">30건</td>
+                                <td class="py-3 px-4 text-slate-300">0명</td>
+                                <td class="py-3 px-4 text-city-sky">31명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 font-semibold">부산 최고 빈도</span> 해안 관광 연계</td>
+                            </tr>
+                            <tr class="district-row hover:bg-city-dark/40" data-region="busan" data-name="동래구">
+                                <td class="py-3 px-4 text-blue-400 font-medium">부산</td>
+                                <td class="py-3 px-4 font-bold text-white">동래구</td>
+                                <td class="py-3 px-4 font-bold">21건</td>
+                                <td class="py-3 px-4 text-slate-300">0명</td>
+                                <td class="py-3 px-4 text-city-sky">22명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300">주거 밀집</span></td>
+                            </tr>
+                            <tr class="district-row hover:bg-city-dark/40" data-region="busan" data-name="부산진구">
+                                <td class="py-3 px-4 text-blue-400 font-medium">부산</td>
+                                <td class="py-3 px-4 font-bold text-white">부산진구</td>
+                                <td class="py-3 px-4 font-bold">18건</td>
+                                <td class="py-3 px-4 text-slate-300">1명</td>
+                                <td class="py-3 px-4 text-city-sky">19명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300">교통 중심지</span></td>
+                            </tr>
+                            <!-- Daegu Districts -->
+                            <tr class="district-row hover:bg-city-dark/40" data-region="daegu" data-name="동구">
+                                <td class="py-3 px-4 text-amber-400 font-medium">대구</td>
+                                <td class="py-3 px-4 font-bold text-white">동구</td>
+                                <td class="py-3 px-4 font-bold">51건</td>
+                                <td class="py-3 px-4 text-slate-300">1명</td>
+                                <td class="py-3 px-4 text-city-sky">56명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-semibold">대구 최고 빈도</span> 외곽 연계 도로</td>
+                            </tr>
+                            <tr class="district-row hover:bg-city-dark/40" data-region="daegu" data-name="중구">
+                                <td class="py-3 px-4 text-amber-400 font-medium">대구</td>
+                                <td class="py-3 px-4 font-bold text-white">중구</td>
+                                <td class="py-3 px-4 font-bold">30건</td>
+                                <td class="py-3 px-4 text-slate-300">0명</td>
+                                <td class="py-3 px-4 text-city-sky">33명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">원도심 중심</span></td>
+                            </tr>
+                            <tr class="district-row hover:bg-city-dark/40" data-region="daegu" data-name="서구">
+                                <td class="py-3 px-4 text-amber-400 font-medium">대구</td>
+                                <td class="py-3 px-4 font-bold text-white">서구</td>
+                                <td class="py-3 px-4 font-bold">29건</td>
+                                <td class="py-3 px-4 text-slate-300">1명</td>
+                                <td class="py-3 px-4 text-city-sky">31명</td>
+                                <td class="py-3 px-4 text-slate-300 text-xs"><span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">원도심 인근</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Section: Monthly Trend Analysis (월별 추이 분석) -->
+        <section id="monthly-trend" class="space-y-6">
+            <div class="border-l-4 border-city-sky pl-4">
+                <span class="text-city-sky text-xs font-bold uppercase tracking-wider">Chapter 03-2</span>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-white">월별 자전거 교통사고 발생 추이 분석</h3>
+            </div>
+            <div class="bg-city-card border border-city-sky/20 rounded-2xl p-6 sm:p-8 card-shadow space-y-6">
+                <p class="text-slate-300 text-base leading-relaxed">
+                    자전거 이용량은 기상 조건과 야외 활동 시즌에 직접적인 영향을 받습니다. 2025년 월별 사고 발생 분포를 통해 자전거 안전사고의 계절적 피크 타임을 파악할 수 있습니다.
+                </p>
+                
+                <!-- Monthly Visual Bar Distribution / Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-4 rounded-xl text-center space-y-2">
+                        <div class="text-xs font-bold text-slate-400">1월 (동절기)</div>
+                        <div class="text-xl font-black text-white">245건</div>
+                        <div class="w-full bg-slate-800 rounded-full h-2"><div class="bg-blue-400 h-2 rounded-full" style="width: 45%;"></div></div>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-4 rounded-xl text-center space-y-2">
+                        <div class="text-xs font-bold text-slate-400">2월 (동절기)</div>
+                        <div class="text-xl font-black text-white">230건</div>
+                        <div class="w-full bg-slate-800 rounded-full h-2"><div class="bg-blue-400 h-2 rounded-full" style="width: 40%;"></div></div>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-4 rounded-xl text-center space-y-2">
+                        <div class="text-xs font-bold text-slate-400">3월 (해빙기)</div>
+                        <div class="text-xl font-black text-white">380건</div>
+                        <div class="w-full bg-slate-800 rounded-full h-2"><div class="bg-city-sky h-2 rounded-full" style="width: 65%;"></div></div>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-4 rounded-xl text-center space-y-2">
+                        <div class="text-xs font-bold text-slate-400">4월 (봄철)</div>
+                        <div class="text-xl font-black text-white">490건</div>
+                        <div class="w-full bg-slate-800 rounded-full h-2"><div class="bg-city-sky h-2 rounded-full" style="width: 82%;"></div></div>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-4 rounded-xl text-center space-y-2 ring-2 ring-city-sky">
+                        <div class="text-xs font-bold text-city-sky">5월 (성수기 피크)</div>
+                        <div class="text-xl font-black text-city-sky">595건</div>
+                        <div class="w-full bg-slate-800 rounded-full h-2"><div class="bg-city-sky h-2 rounded-full" style="width: 100%;"></div></div>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-4 rounded-xl text-center space-y-2">
+                        <div class="text-xs font-bold text-slate-400">6월 (초여름)</div>
+                        <div class="text-xl font-black text-white">510건</div>
+                        <div class="w-full bg-slate-800 rounded-full h-2"><div class="bg-city-sky h-2 rounded-full" style="width: 85%;"></div></div>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-4 rounded-xl text-center space-y-2">
+                        <div class="text-xs font-bold text-slate-400">7월 (혹서기/장마)</div>
+                        <div class="text-xl font-black text-white">420건</div>
+                        <div class="w-full bg-slate-800 rounded-full h-2"><div class="bg-blue-400 h-2 rounded-full" style="width: 70%;"></div></div>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-4 rounded-xl text-center space-y-2">
+                        <div class="text-xs font-bold text-slate-400">8월 (혹서기)</div>
+                        <div class="text-xl font-black text-white">395건</div>
+                        <div class="w-full bg-slate-800 rounded-full h-2"><div class="bg-blue-400 h-2 rounded-full" style="width: 66%;"></div></div>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-4 rounded-xl text-center space-y-2 ring-2 ring-city-accent">
+                        <div class="text-xs font-bold text-city-accent">9월 (가을 피크)</div>
+                        <div class="text-xl font-black text-city-accent">570건</div>
+                        <div class="w-full bg-slate-800 rounded-full h-2"><div class="bg-city-accent h-2 rounded-full" style="width: 95%;"></div></div>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-4 rounded-xl text-center space-y-2">
+                        <div class="text-xs font-bold text-slate-400">10월 (가을철)</div>
+                        <div class="text-xl font-black text-white">520건</div>
+                        <div class="w-full bg-slate-800 rounded-full h-2"><div class="bg-city-sky h-2 rounded-full" style="width: 88%;"></div></div>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-4 rounded-xl text-center space-y-2">
+                        <div class="text-xs font-bold text-slate-400">11월 (만추)</div>
+                        <div class="text-xl font-black text-white">380건</div>
+                        <div class="w-full bg-slate-800 rounded-full h-2"><div class="bg-blue-400 h-2 rounded-full" style="width: 65%;"></div></div>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-4 rounded-xl text-center space-y-2">
+                        <div class="text-xs font-bold text-slate-400">12월 (동절기)</div>
+                        <div class="text-xl font-black text-white">250건</div>
+                        <div class="w-full bg-slate-800 rounded-full h-2"><div class="bg-blue-400 h-2 rounded-full" style="width: 42%;"></div></div>
+                    </div>
+                </div>
+
+                <div class="bg-city-sky/10 border border-city-sky/30 p-5 rounded-xl flex items-start gap-4">
+                    <div class="text-city-sky text-2xl mt-0.5"><i class="fa-solid fa-calendar-days"></i></div>
+                    <div>
+                        <h4 class="text-white font-bold mb-1">계절별 사고 집중 인사이트</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            야외 활동이 극대화되는 <b>5월(595건)</b>과 <b>9월(570건)</b>에 연중 사고 발생 건수가 최고점에 도달합니다. 해당 기간에는 자전거 전용도로 집중 순찰 및 야간 주행 안전 계도 캠페인이 필수적입니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Seoul Districts -->
+        <section id="seoul" class="space-y-6">
+            <div class="border-l-4 border-city-sky pl-4">
+                <span class="text-city-sky text-xs font-bold uppercase tracking-wider">Chapter 04</span>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-white">서울특별시 자치구별 사고 집중 지역 분석</h3>
+            </div>
+            <div class="bg-city-card border border-city-sky/20 rounded-2xl p-6 sm:p-8 card-shadow space-y-6">
+                <p class="text-slate-300 text-base leading-relaxed">
+                    서울시 자치구별 데이터는 사고의 <b>'빈도'</b>가 높은 지역과 <b>'치명도'</b>가 높은 지역으로 뚜렷하게 나뉩니다. 시니어 분석가 관점에서 이는 지역별 교통 환경의 차이를 극명하게 보여주는 지표입니다.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-6 rounded-xl space-y-4">
+                        <div class="flex items-center gap-3 text-city-sky text-lg font-bold">
+                            <i class="fa-solid fa-fire text-xl"></i>
+                            <h4>사고 발생 상위 위험 지역 (빈도 중심)</h4>
+                        </div>
+                        <ul class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                            <li><strong class="text-white">주요 거점형(Hub) 지역:</strong> 영등포구(169건, 부상 195명), 송파구(144건, 부상 155명), 강남구(119건, 부상 129명) 등은 사고 발생이 100건을 상회합니다. 주요 업무 및 상업 지구로서 이용객이 밀집합니다.</li>
+                            <li><strong class="text-white">부도심 및 주거 밀집 지역:</strong> 동대문구(107건) 역시 높은 빈도를 기록하며 상위 위험군에 포함되었습니다.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-6 rounded-xl space-y-4">
+                        <div class="flex items-center gap-3 text-city-accent text-lg font-bold">
+                            <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                            <h4>치사율 상위 위험 지역 (심각도 중심)</h4>
+                        </div>
+                        <ul class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                            <li><strong class="text-white">광진구:</strong> 사고 건수는 41건이나 사망자 2명이 발생하여, 치사율이 <span class="text-city-accent font-bold">4.88%</span>에 달합니다. 전국 평균의 3배 수준으로 정밀 진단이 시급합니다.</li>
+                            <li><strong class="text-white">은평구:</strong> 74건 중 2명의 사망자 발생 (치사율 2.7%)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-city-dark/40 border border-slate-700 p-4 rounded-xl text-sm text-slate-300">
+                    <i class="fa-solid fa-lightbulb text-city-sky mr-2"></i><strong>저빈도 지역과의 대조:</strong> 도심 중앙부인 종로구(26건), 중구(18건), 용산구(25건) 등은 사고 빈도가 낮아 유동인구 성격과 도로 환경이 주요 변수임을 방증합니다.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Busan & Daegu -->
+        <section id="busan-daegu" class="space-y-6">
+            <div class="border-l-4 border-city-sky pl-4">
+                <span class="text-city-sky text-xs font-bold uppercase tracking-wider">Chapter 05</span>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-white">부산 및 대구 지역 사고 현황 및 특징</h3>
+            </div>
+            <div class="bg-city-card border border-city-sky/20 rounded-2xl p-6 sm:p-8 card-shadow space-y-6">
+                <p class="text-slate-300 text-base leading-relaxed">
+                    영남권 거점 도시의 경우, 특정 거점을 중심으로 사고가 집중되는 양상을 보입니다.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-6 rounded-xl space-y-3">
+                        <div class="text-blue-400 font-bold text-lg flex items-center gap-2">
+                            <i class="fa-solid fa-water"></i> 부산광역시 (총 175건)
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            총 175건의 사고 중 <strong class="text-white">수영구(30건)</strong>가 가장 높은 빈도를 기록했습니다. 뒤를 이어 동래구(21건), 부산진구(18건) 순으로 집계되었습니다. 부산의 경우 사고 발생 규모 대비 부상자 비율이 일정하여 예측 가능한 위험도를 보입니다.
+                        </p>
+                    </div>
+                    <div class="bg-city-dark/60 border border-city-sky/20 p-6 rounded-xl space-y-3">
+                        <div class="text-amber-400 font-bold text-lg flex items-center gap-2">
+                            <i class="fa-solid fa-mountain-city"></i> 대구광역시 (총 369건)
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            총 369건의 사고와 4명의 사망자가 발생했습니다. 구별로는 <strong class="text-white">동구(51건)</strong>의 사고 발생률이 가장 높았으며, <strong class="text-white">중구(30건)</strong>와 서구(29건) 등 원도심 인근 지역에서 사고가 지속 보고되고 있습니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Conclusion -->
+        <section id="conclusion" class="space-y-6">
+            <div class="border-l-4 border-city-sky pl-4">
+                <span class="text-city-sky text-xs font-bold uppercase tracking-wider">Chapter 06</span>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-white">통계 기반 위험도 종합 결론</h3>
+            </div>
+            <div class="bg-city-card border border-city-sky/20 rounded-2xl p-6 sm:p-8 card-shadow space-y-6">
+                <p class="text-slate-300 text-base leading-relaxed">
+                    2025년 자전거 사고 통계를 종합 분석한 시니어 분석가의 결론은 다음과 같습니다.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4 p-4 rounded-xl bg-city-dark/60 border border-city-sky/20">
+                        <div class="w-8 h-8 rounded-full bg-city-sky text-city-dark font-black flex items-center justify-center shrink-0">1</div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1">사고의 다인 피해 구조</h4>
+                            <p class="text-slate-300 text-sm leading-relaxed">전국 평균 부상자 비율이 <b>108%</b>라는 점은 자전거 사고가 단독 사고가 아닌 충돌 사고 비중이 높음을 방증합니다. 자전거 전용 도로의 분리 및 보행자 혼용 구간의 안전 강화가 최우선 과제입니다.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 rounded-xl bg-city-dark/60 border border-city-sky/20">
+                        <div class="w-8 h-8 rounded-full bg-city-sky text-city-dark font-black flex items-center justify-center shrink-0">2</div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1">빈도와 치명도의 분리 관리</h4>
+                            <p class="text-slate-300 text-sm leading-relaxed">영등포구, 송파구와 같이 사고가 <b>'밀집'</b>되는 지역에는 사고 예방 인프라를, 광진구와 같이 <b>'치명도'</b>가 높은 지역에는 속도 제한 및 안전 시설 확충 등 사망 사고 저감 대책을 차별화해야 합니다.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 rounded-xl bg-city-dark/60 border border-city-sky/20">
+                        <div class="w-8 h-8 rounded-full bg-city-sky text-city-dark font-black flex items-center justify-center shrink-0">3</div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1">권역별 위험 지점 특정 및 타겟형 캠페인</h4>
+                            <p class="text-slate-300 text-sm leading-relaxed">서울 영등포·송파, 부산 수영, 대구 동구 등 각 도시의 사고 다발 거점을 중심으로 한 '타겟형 안전 캠페인'과 순찰 강화가 사고 총량을 줄이는 가장 효율적인 방안입니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-city-dark border-t border-city-sky/20 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-500 text-xs space-y-2">
+            <p>&copy; 2025 대한민국 자전거 교통사고 통계 분석 인텔리전스 (Manchester City Theme Portal). All rights reserved.</p>
+            <p>Designed with Sky Blue & Navy aesthetics for urban safety intelligence.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Filtering & Home/Dashboard Toggle Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const homeScreen = document.getElementById('homeScreen');
+            const heroSection = document.getElementById('heroSection');
+            const mainDashboard = document.getElementById('mainDashboard');
+            const toggleViewBtn = document.getElementById('toggleViewBtn');
+            const viewBtnText = document.getElementById('viewBtnText');
+            const viewBtnIcon = document.getElementById('viewBtnIcon');
+            const enterDashboardBtn = document.getElementById('enterDashboardBtn');
+            const navHomeLink = document.getElementById('navHomeLink');
+            const navLogoBtn = document.getElementById('navLogoBtn');
+            const gotoDistrictBtn = document.getElementById('gotoDistrictBtn');
+
+            const regionFilter = document.getElementById('regionFilter');
+            const districtSearch = document.getElementById('districtSearch');
+            const districtRows = document.querySelectorAll('.district-row');
+
+            let isHomeActive = true;
+
+            function showHome() {
+                isHomeActive = true;
+                homeScreen.classList.remove('hidden');
+                heroSection.classList.add('hidden');
+                mainDashboard.classList.add('hidden');
+                viewBtnText.textContent = '대시보드 보기';
+                viewBtnIcon.className = 'fa-solid fa-chart-line';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function showDashboard() {
+                isHomeActive = false;
+                homeScreen.classList.add('hidden');
+                heroSection.classList.remove('hidden');
+                mainDashboard.classList.remove('hidden');
+                viewBtnText.textContent = '홈 화면으로';
+                viewBtnIcon.className = 'fa-solid fa-house';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            toggleViewBtn.addEventListener('click', function() {
+                if (isHomeActive) {
+                    showDashboard();
+                } else {
+                    showHome();
+                }
+            });
+
+            if (enterDashboardBtn) {
+                enterDashboardBtn.addEventListener('click', showDashboard);
+            }
+
+            if (navHomeLink) {
+                navHomeLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showHome();
+                });
+            }
+
+            if (navLogoBtn) {
+                navLogoBtn.addEventListener('click', showHome);
+            }
+
+            if (gotoDistrictBtn) {
+                gotoDistrictBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showDashboard();
+                    setTimeout(() => {
+                        const target = document.getElementById('district-explorer');
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }, 150);
+                });
+            }
+
+            // District filtering logic
+            function filterDistrictTable() {
+                const selectedRegion = regionFilter.value;
+                const query = districtSearch.value.toLowerCase().trim();
+
+                districtRows.forEach(row => {
+                    const region = row.getAttribute('data-region');
+                    const name = row.getAttribute('data-name').toLowerCase();
+
+                    const matchesRegion = (selectedRegion === 'all' || region === selectedRegion);
+                    const matchesQuery = (name.includes(query));
+
+                    if (matchesRegion && matchesQuery) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
+            if (regionFilter) {
+                regionFilter.addEventListener('change', filterDistrictTable);
+            }
+            if (districtSearch) {
+                districtSearch.addEventListener('input', filterDistrictTable);
+            }
+        });
+    </script>
+</body>
+</html>
